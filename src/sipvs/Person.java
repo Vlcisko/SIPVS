@@ -21,18 +21,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "person")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Person implements Serializable{
+	
+	private String personID;
     private String firstName;
     private String lastName;
     private String birthDate;
     private List<Child> children = new ArrayList<Child>();
     private String status;
     private String gender;
-
+    
     
     private static final long serialVersionUID = 1L;
     
     public Person(){
         super();
+        this.personID = "HRXXXXXX";
         this.firstName = "";
         this.lastName = "";
         this.birthDate = "";
@@ -46,6 +49,7 @@ public class Person implements Serializable{
                 String birthDate, 
                 String status, 
                 String gender, 
+                String personID,
                 List<Child> children) {
         super();
         this.firstName = firstName;
@@ -53,6 +57,7 @@ public class Person implements Serializable{
         this.birthDate = birthDate;
         this.status = status;
         this.gender = gender;
+        this.personID= personID;
         setChildren(children);
     }
     
@@ -118,12 +123,21 @@ public class Person implements Serializable{
         }
     }
     
+	public String getPersonID() {
+		return personID;
+	}
+	
+	public void setPersonID(String IdNum) {
+		this.personID = IdNum;
+	}
+    
     public List<String> getPersonTextFieldList(){
         List<String> personFieldList = new ArrayList<String>();
         personFieldList.add(this.firstName);
         personFieldList.add(this.lastName);
         personFieldList.add(this.status);
         personFieldList.add(this.gender);
+        personFieldList.add(this.personID);
         return personFieldList;
     }
     
@@ -137,10 +151,13 @@ public class Person implements Serializable{
         System.out.println(getBirthDate());
         System.out.println(getStatus());
         System.out.println(getGender());
+        System.out.println(getPersonID());
         for(Child child : children){
             System.out.println("Meno dietata "+child.getFirstName());
             System.out.println("Priezvisko dietata "+child.getLastName());
         }
         
     }
+    
+
 }

@@ -61,12 +61,14 @@ public class FXMLDocumentController implements Initializable {
     //person firstName, lastName, date of birth
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
+    private TextField PersonID = new TextField();
     private DatePicker birthDate = new DatePicker();
     
     //RadioButtons for person gender
     private RadioButton femaleRB = new RadioButton("Žena");
     private RadioButton maleRB = new RadioButton("Muž");
     private ToggleGroup genderTG = new ToggleGroup();
+    
     //RadioButtons for person status
     private RadioButton marriedRB = new RadioButton("Ženatý");
     private RadioButton singleRB =new RadioButton("Slobodný");
@@ -74,20 +76,26 @@ public class FXMLDocumentController implements Initializable {
     
     //box for all fields = Person and Childrens
     private VBox fieldsPanel = new VBox();
+    
     //list of person boxes 
     private List<HBox> fieldsPerson = new ArrayList<HBox>();
+    
     //list of children boxes
     private List<HBox> fieldsChildren = new ArrayList<HBox>();
+    
     //box just for children fields
     private VBox childrenPanel = new VBox();
+    
     //list of children textFields
     public List<TextField[]> children = new ArrayList<TextField[]>();
+    
     //number of children
     public ComboBox<Item> choices = new ComboBox<>();
     
     //save and validate buttons
     private Button saveButton = new Button();
     private Button validateButton = new Button();
+    private Button gnerateHTMLButton = new Button();
     
     //new person
     private Person person = new Person();
@@ -100,7 +108,7 @@ public class FXMLDocumentController implements Initializable {
         List<Child> children = new ArrayList<Child>();
         children.add(ondrej);
         children.add(lucia);      
-        Person tomas = new Person("Tomas", "Julius","2019-10-18","zenaty", "muz",children);
+        Person tomas = new Person("Tomas", "Julius","2019-10-18","zenaty", "muz", "HR123456" ,children);
         
         //create fields for new person
         createFields(person);        
@@ -111,6 +119,7 @@ public class FXMLDocumentController implements Initializable {
         
         person.setFirstName(firstName.getText());
         person.setLastName(lastName.getText());
+        person.setPersonID(PersonID.getText());
         
         for(TextField[] child : children){        
             TextField childFirstName = child[0]; 
@@ -198,11 +207,13 @@ public class FXMLDocumentController implements Initializable {
     public Boolean isFieldValid(HBox hb){
         Boolean valid = true;
         for(Node node: hb.getChildren()){
-             if(node instanceof TextField){                  
-                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
-                    ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
-                    valid = false;
-                 }
+             if(node instanceof TextField){
+            	 System.out.println(((TextField)node).getText());
+// zrusil som validaciu lebo ved preco to dat ne komplet text fieldy?            	 
+//                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
+//                    ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
+//                    valid = false;
+//                 }
              }
              if(node instanceof DatePicker){
                  if(((DatePicker)node).getValue() == null){ 
@@ -269,14 +280,27 @@ public class FXMLDocumentController implements Initializable {
             }
         });
         fieldsPanel.getChildren().add(validateButton);
-
+        
+        // Prida generuj HTML Button
+        gnerateHTMLButton.setText("Generuj HTML");
+        gnerateHTMLButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+//                MOJAFUKNCIA(event);
+            	
+            }
+        });
+        fieldsPanel.getChildren().add(gnerateHTMLButton);
     }
     
     public void createPersonFields(Person person){
+    	
         //firstname
         fieldsPerson.add(createHBoxNode("Meno", firstName, person.getFirstName()));       
         //lastname
         fieldsPerson.add(createHBoxNode("Priezvisko", lastName, person.getLastName()));      
+        //ID Card Number
+        fieldsPerson.add(createHBoxID("Číslo O.P.:", PersonID, person.getPersonID()));      
         //gender
         fieldsPerson.add(createHBoxRB( new Label("Pohlavie"), maleRB, femaleRB, genderTG, person.isSetGender(), (person.getGender() == "muz")));
         //state   
@@ -292,6 +316,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public void createChildrenFields(Person person){
+    	
         //if has at least one child create and add child fields
         if(person.getChildren().size() > 0){
             choices.getSelectionModel().select(person.getChildren().size());         
@@ -334,7 +359,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public HBox createHBoxNode(String label1Text,  Node field, String text){
+    	
         HBox hbox = new HBox();
+        
         if(field instanceof TextField){
             TextField tf = (TextField)field;
             tf.setText(text);
@@ -357,6 +384,29 @@ public class FXMLDocumentController implements Initializable {
         }else if(field instanceof ComboBox){      
         }
         hbox.getChildren().addAll(new Label(label1Text), field);
+        return hbox;
+    }
+    
+    
+    public HBox createHBoxID(String label1Text,  Node field, String text){
+    	
+        HBox hbox = new HBox();
+        
+        if(field instanceof TextField){
+            TextField tf = (TextField)field;
+            tf.setText(text);
+//            tf.textProperty().addListener((observable, oldValue, newValue) -> {
+//                if(isStringOnlyAlphabet(newValue)){
+//                    tf.setStyle("-fx-background-color: gray; -fx-padding: 5;");
+//                }else {
+//                    System.out.println("textfield changed from " + oldValue + " to " + newValue);
+//                    tf.setStyle("-fx-background-color: red; -fx-padding: 5;");
+//                }
+//            });
+        }
+        
+        hbox.getChildren().addAll(new Label(label1Text), field);
+        
         return hbox;
     }
     

@@ -11,14 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author vlkpa
- */
-public class SIPVS extends Application {
+
+public class Main extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+    	
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
         Scene scene = new Scene(root);
@@ -27,9 +25,6 @@ public class SIPVS extends Application {
         stage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }

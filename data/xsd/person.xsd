@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+   <!--Elements-->
+   <xs:element name="person" type="personType" />
+   <!--End Elements-->
+
+  <!--Attributes-->
+  <xs:attribute name="person_id" type="personIDType"/>
+  <!--End Attributes-->
+
+
+   <xs:complexType name="personType">
+      <xs:attribute ref="person_id" use="required"/> 
+      <xs:sequence>
+         <xs:element type="xs:date" name="birthDate" />
+         <xs:element type="childrenType" name="children" maxOccurs="unbounded" minOccurs="0" />
+         <xs:element type="xs:string" name="firstName" minOccurs="0" />
+         <xs:element type="xs:string" name="gender" />
+         <xs:element type="xs:string" name="lastName" />
+         <xs:element type="xs:string" name="status" />
+      </xs:sequence>
+      
+   </xs:complexType>
+
+   <xs:complexType name="childrenType">
+      <xs:sequence>
+         <xs:element type="xs:string" name="firstName" />
+         <xs:element type="xs:string" name="lastName" />
+      </xs:sequence>
+   </xs:complexType>
+
+<!--Restriction person_id as the ID card has 8 places-->
+<xs:simpleType name="personIDType">
+	<xs:restriction base="xs:string">
+    <xs:pattern value="[a-zA-Z0-9]{8}"/>
+	</xs:restriction>
+</xs:simpleType>
+<!--End Restrictions-->
+
+</xs:schema>

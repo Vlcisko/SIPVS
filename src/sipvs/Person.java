@@ -12,21 +12,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author vlkpa
  */
 @XmlRootElement(name = "person")
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"firstName", "lastName", "gender", "birthDate", "status", "children"})
 public class Person implements Serializable{
 	
-	private String personID;
+    @XmlAttribute(name = "personID")
+    private String personID;
+    
     private String firstName;
     private String lastName;
     private String birthDate;
+    
+    @XmlElement(name = "child")
     private List<Child> children = new ArrayList<Child>();
+    
     private String status;
     private String gender;
     
@@ -137,7 +146,6 @@ public class Person implements Serializable{
         personFieldList.add(this.lastName);
         personFieldList.add(this.status);
         personFieldList.add(this.gender);
-        personFieldList.add(this.personID);
         return personFieldList;
     }
     

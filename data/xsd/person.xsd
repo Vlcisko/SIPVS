@@ -7,12 +7,11 @@
    <!--End Elements-->
 
   <!--Attributes-->
-  <xs:attribute name="person_id" type="personIDType"/>
+  <xs:attribute name="personID" type="personIDType"/>
   <!--End Attributes-->
 
 
    <xs:complexType name="personType">
-      <xs:attribute ref="person_id" use="required"/> 
       <xs:sequence>
          <xs:element type="xs:string" name="firstName" minOccurs="0" />
          <xs:element type="xs:string" name="lastName" />
@@ -21,7 +20,7 @@
          <xs:element type="xs:string" name="status" />
          <xs:element type="childrenType" name="children" maxOccurs="unbounded" minOccurs="0" />
       </xs:sequence>
-      
+      <xs:attribute ref="personID" use="required"/> 
    </xs:complexType>
 
    <xs:complexType name="childrenType">

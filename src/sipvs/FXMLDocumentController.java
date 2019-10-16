@@ -1,6 +1,9 @@
 package sipvs;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.time.LocalDate;
@@ -17,9 +20,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -45,9 +52,15 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  *
@@ -115,11 +128,20 @@ public class FXMLDocumentController implements Initializable {
     }  
     
     private void saveXml(ActionEvent event) {  
-        Boolean areCildrenValid = true;
+        Boolean areChildrenValid = true;
+        Boolean isPersonIDValid = true;
         
         person.setFirstName(firstName.getText());
         person.setLastName(lastName.getText());
-        person.setPersonID(PersonID.getText());
+        
+        
+        //if(PersonID.getText().equals("HRXXXXXX") || !PersonID.getText().matches("^[a-zA-Z0-9]{8}")){
+        if(PersonID.getText().equals("HRXXXXXX")){
+            PersonID.setStyle("-fx-background-color: red; -fx-padding: 5;");
+            isPersonIDValid = false;                     
+        }else{
+            person.setPersonID(PersonID.getText()); 
+        }
         
         for(TextField[] child : children){        
             TextField childFirstName = child[0]; 
@@ -128,7 +150,7 @@ public class FXMLDocumentController implements Initializable {
             if(isChildValid(child)){
                 person.setChild(newChild);
             }else {
-                areCildrenValid = false;
+                areChildrenValid = false;
             }
         }
             
@@ -138,8 +160,9 @@ public class FXMLDocumentController implements Initializable {
         if(birthDate.getValue() != null){
             person.setBirthDate(birthDate.getValue().toString());
         }
+        
                     
-        if(isPersonValid(fieldsPerson) && areCildrenValid){  //if all person and children fields are valid, create and save to XML           
+        if(isPersonValid(fieldsPerson) && areChildrenValid && isPersonIDValid){      
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Xml file (*.xml)", "*.xml"));
             File saveXmlFile = fileChooser.showSaveDialog((Stage) root.getScene().getWindow());
@@ -162,33 +185,32 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private void validateXmlXsd(ActionEvent event) {  
-        FileChooser fileChooser = new FileChooser();
-        File selectedXsdFile;
-        File selectedXmlFile;
-        
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText("Vyberte XML súbor");
-        alert.showAndWait();
-        selectedXmlFile = fileChooser.showOpenDialog((Stage) root.getScene().getWindow());
-
-        if(selectedXmlFile != null){
-            alert = new Alert(AlertType.INFORMATION);
-            alert.setHeaderText("Vyberte XSD súbor");
-            alert.showAndWait();
-            selectedXsdFile = fileChooser.showOpenDialog((Stage) root.getScene().getWindow());
-            if(selectedXsdFile != null){
-                validateXMLwithXSD(selectedXmlFile, selectedXsdFile);
-            }else {
-                alert = new Alert(AlertType.ERROR);
-                alert.setHeaderText("XSD súbor sa nenašiel");
-                alert.showAndWait();
-            }
-        }else {
-            alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("XML súbor sa nenašiel");
-            alert.showAndWait();
-        }                          
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ValidationForm.fxml"));
+            Parent validationRoot = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Validácia XML-XSD");
+            stage.setScene(new Scene(validationRoot));
+            stage.show();
+        } catch (IOException e) {
+                e.printStackTrace();
+        }             
     }
+    
+    
+    private void showXSLTfromXML(ActionEvent event) {         
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("HTMLGeneratorForm.fxml"));
+            Parent validationRoot = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Generovanie HTML");
+            stage.setScene(new Scene(validationRoot));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }                       
+    }
+    
     
     public String getToggleSelected(ToggleGroup tg, String text1, String text2){
         if(tg.getSelectedToggle() == null){
@@ -210,10 +232,10 @@ public class FXMLDocumentController implements Initializable {
              if(node instanceof TextField){
             	 System.out.println(((TextField)node).getText());
 // zrusil som validaciu lebo ved preco to dat ne komplet text fieldy?            	 
-//                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
-//                    ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
-//                    valid = false;
-//                 }
+                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
+                    ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
+                    valid = false;
+                 }
              }
              if(node instanceof DatePicker){
                  if(((DatePicker)node).getValue() == null){ 
@@ -257,7 +279,7 @@ public class FXMLDocumentController implements Initializable {
         root.getChildren().add(fieldsPanel);
         
         ScrollPane s1 = new ScrollPane();
-        s1.setPrefSize(550, 650);
+        s1.setPrefSize(560, 660);
         s1.setContent(fieldsPanel);
         root.getChildren().add(s1);
         
@@ -286,32 +308,32 @@ public class FXMLDocumentController implements Initializable {
         gnerateHTMLButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                MOJAFUKNCIA(event);
-            	
+                showXSLTfromXML(event);         	
             }
         });
         fieldsPanel.getChildren().add(gnerateHTMLButton);
+        fieldsPanel.setPrefSize(540, 640);
     }
     
     public void createPersonFields(Person person){
     	
         //firstname
-        fieldsPerson.add(createHBoxNode("Meno", firstName, person.getFirstName()));       
+        fieldsPerson.add(createHBoxNode("Meno", firstName, person.getFirstName(), new Tooltip("Pole nesmie obsahovať čísla ani iné špeciálne znaky")));       
         //lastname
-        fieldsPerson.add(createHBoxNode("Priezvisko", lastName, person.getLastName()));      
+        fieldsPerson.add(createHBoxNode("Priezvisko", lastName, person.getLastName(), new Tooltip("Pole nesmie obsahovať čísla ani iné špeciálne znaky")));      
         //ID Card Number
-        fieldsPerson.add(createHBoxID("Číslo O.P.:", PersonID, person.getPersonID()));      
+        fieldsPerson.add(createHBoxID("Číslo O.P.:", PersonID, person.getPersonID(), new Tooltip("Pole musí obsahovať presne 8 znakov (čísel alebo písmen) napr. HR123456")));      
         //gender
         fieldsPerson.add(createHBoxRB( new Label("Pohlavie"), maleRB, femaleRB, genderTG, person.isSetGender(), (person.getGender() == "muz")));
         //state   
         fieldsPerson.add(createHBoxRB(new Label("Stav"), singleRB, marriedRB, statusTG , person.isSetStatus(), (person.getStatus() == "slobodny")));
         //birthdate
-        fieldsPerson.add(createHBoxNode("Dátum narodenia", birthDate, person.getBirthDate()));
+        fieldsPerson.add(createHBoxNode("Dátum narodenia", birthDate, person.getBirthDate(), new Tooltip()));
         //num of children combobox       
         for (int i = 0 ; i <=50 ; i++){
             choices.getItems().add(new Item("počet detí: "+i, Integer.toString(i)));
         }       
-        fieldsPerson.add(createHBoxNode("Počet detí", choices, person.getBirthDate()));
+        fieldsPerson.add(createHBoxNode("Počet detí", choices, person.getBirthDate(), new Tooltip()));
         addFieldsToPanel(fieldsPanel, fieldsPerson);
     }
     
@@ -322,7 +344,7 @@ public class FXMLDocumentController implements Initializable {
             choices.getSelectionModel().select(person.getChildren().size());         
             for(Child child : person.getChildren()){
                 int i = person.getChildren().indexOf(child);
-                fieldsChildren.add(createHBoxChild(("Dieťa "+ (i+1)), child.getFirstName(), child.getLastName()));            
+                fieldsChildren.add(createHBoxChild(("Dieťa "+ (i+1)), child.getFirstName(), child.getLastName(), new Tooltip("Pole nesmie obsahovať čísla ani iné špeciálne znaky")));            
             }
             addFieldsToPanel(childrenPanel, fieldsChildren);
         } else{
@@ -337,18 +359,25 @@ public class FXMLDocumentController implements Initializable {
                     int numChildrens = Integer.parseInt(newItem.detailsProperty().getValue());
                     for(int i=0; i<numChildrens; i++)
                     {
-                        fieldsChildren.add(createHBoxChild(("Dieťa "+ (i+1)), "", ""));
+                        fieldsChildren.add(createHBoxChild(("Dieťa "+ (i+1)), "", "", new Tooltip("Pole nesmie obsahovať čísla ani iné špeciálne znaky")));
                     }
                     addFieldsToPanel(childrenPanel, fieldsChildren);
                 }
             });
         }       
+//        childrenPanel.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;"
+//        + "-fx-border-width: 2;" + "-fx-border-insets: 5;"
+//        + "-fx-border-radius: 5;" + "-fx-border-color: blue;");
         fieldsPanel.getChildren().add(childrenPanel);
     }
     
     public void addFieldsToPanel(VBox vbox, List<HBox> fields){
         for(HBox field : fields){
-            field.setStyle("-fx-background-color: white;-fx-padding: 5;");
+            //field.setStyle("-fx-background-color: white;-fx-padding: 5;");
+               field.setStyle("-fx-border-width: 0 0 1 0;" +
+                "-fx-border-color: black;"
+                + "-fx-padding: 5;");
+               field.setAlignment(Pos.CENTER);
             for(Node child: field.getChildren()){
                 if(child instanceof Label){
                     child.setStyle("-fx-padding: 5;-fx-font-size:14px;");
@@ -358,13 +387,14 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    public HBox createHBoxNode(String label1Text,  Node field, String text){
+    public HBox createHBoxNode(String label1Text,  Node field, String text, Tooltip tooltip){
     	
         HBox hbox = new HBox();
         
         if(field instanceof TextField){
             TextField tf = (TextField)field;
             tf.setText(text);
+            tf.setTooltip(tooltip);
             tf.textProperty().addListener((observable, oldValue, newValue) -> {
                 if(isStringOnlyAlphabet(newValue)){
                     tf.setStyle("-fx-background-color: gray; -fx-padding: 5;");
@@ -375,34 +405,42 @@ public class FXMLDocumentController implements Initializable {
             });
         }else if(field instanceof DatePicker){
             DatePicker dp = (DatePicker)field;
+            dp.setPromptText("16.10.2019");
             if(text != ""){
                 dp.setValue(LocalDate.parse(text));
-            }
+            }            
             dp.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
                 dp.setStyle("-fx-background-color: gray; -fx-padding: 5;");
             });
         }else if(field instanceof ComboBox){      
         }
-        hbox.getChildren().addAll(new Label(label1Text), field);
+        Label lb = new Label(label1Text);
+        lb.setStyle("-fx-padding: 5;");
+        hbox.getChildren().addAll(lb, field);
+        hbox.setStyle("-fx-border-width: 1 0 1 0;" +
+                    "-fx-border-color: black;"
+                    + "-fx-padding: 5;");
         return hbox;
     }
     
     
-    public HBox createHBoxID(String label1Text,  Node field, String text){
+    public HBox createHBoxID(String label1Text,  Node field, String text, Tooltip tooltip){
     	
         HBox hbox = new HBox();
         
         if(field instanceof TextField){
             TextField tf = (TextField)field;
-            tf.setText(text);
-//            tf.textProperty().addListener((observable, oldValue, newValue) -> {
-//                if(isStringOnlyAlphabet(newValue)){
-//                    tf.setStyle("-fx-background-color: gray; -fx-padding: 5;");
-//                }else {
-//                    System.out.println("textfield changed from " + oldValue + " to " + newValue);
-//                    tf.setStyle("-fx-background-color: red; -fx-padding: 5;");
-//                }
-//            });
+            tf.setPromptText(text);
+            tf.setTooltip(tooltip);
+            tf.textProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue.equals("HRXXXXXX") || !newValue.matches("^[a-zA-Z0-9]{8}")){
+                //if(newValue.equals("HRXXXXXX")){
+                    System.out.println("textfield changed from " + oldValue + " to " + newValue);
+                    tf.setStyle("-fx-background-color: red; -fx-padding: 5;");
+                }else {
+                    tf.setStyle("-fx-background-color: gray; -fx-padding: 5;");
+                }
+            });
         }
         
         hbox.getChildren().addAll(new Label(label1Text), field);
@@ -410,13 +448,13 @@ public class FXMLDocumentController implements Initializable {
         return hbox;
     }
     
-    public HBox createHBoxChild(String label1Text, String firstName, String lastName){
+    public HBox createHBoxChild(String label1Text, String firstName, String lastName, Tooltip tooltip){
         HBox hbox = new HBox();
         TextField fields[] = new TextField[2];
         fields[0]= new TextField();
         fields[1]= new TextField();
-        hbox.getChildren().addAll(new Label(label1Text), createHBoxNode("Meno",  fields[0], firstName));
-        hbox.getChildren().addAll(createHBoxNode("Priezvisko",  fields[1], lastName));
+        hbox.getChildren().addAll(new Label(label1Text), createHBoxNode("Meno",  fields[0], firstName, tooltip));
+        hbox.getChildren().addAll(createHBoxNode("Priezvisko",  fields[1], lastName, tooltip));     
         children.add(fields);
         return hbox;
     }
@@ -449,41 +487,6 @@ public class FXMLDocumentController implements Initializable {
         return hbox;
     }
     
-    
-    //https://howtodoinjava.com/jaxb/xsd-schema-validation/
-    private static void validateXMLwithXSD(File xmlFile, File xsdFile) {         
-        JAXBContext jaxbContext;       
-        try{
-            //Get JAXBContext
-            jaxbContext = JAXBContext.newInstance(Person.class);
-             
-            //Create Unmarshaller
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-             
-            //Setup schema validator
-            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema personSchema = sf.newSchema(xsdFile);
-            jaxbUnmarshaller.setSchema(personSchema);
-             
-            //Unmarshal xml file
-            Person person = (Person) jaxbUnmarshaller.unmarshal(xmlFile);
-             
-            person.printPerson();
-            
-            Alert errorAlert = new Alert(AlertType.INFORMATION);
-            errorAlert.setHeaderText("XML je validné voči XSD");
-            errorAlert.setContentText("Vybraný XML súbor je správny");
-            errorAlert.showAndWait();
-        }
-        catch (JAXBException | SAXException e)
-        {
-            e.printStackTrace();
-            Alert errorAlert = new Alert(AlertType.ERROR);
-            errorAlert.setHeaderText("XML nie je validné voči XSD");
-            errorAlert.setContentText("Vybraný XML súbor je chybný");
-            errorAlert.showAndWait();
-        }
-    }
     
     //https://howtodoinjava.com/jaxb/write-object-to-xml/
     private static void jaxbObjectToXML(Person person, File selectedXmlFile) {

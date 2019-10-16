@@ -266,13 +266,13 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public Boolean isPersonValid(List<HBox> hb){
-        Boolean valid = true;
+        Boolean valid1 = true;
         for(HBox person : hb){
             if(!isFieldValid(person)){
-                valid = false;
+                valid1 = false;
             }
         }
-        return valid;
+        return valid1;
     }
     
     public void createFields(Person person){

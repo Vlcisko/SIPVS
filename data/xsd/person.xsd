@@ -18,12 +18,12 @@
          <xs:element type="xs:string" name="gender" />
          <xs:element type="xs:date" name="birthDate" />
          <xs:element type="xs:string" name="status" />
-         <xs:element type="childrenType" name="children" maxOccurs="unbounded" minOccurs="0" />
+         <xs:element type="childType" name="child" maxOccurs="unbounded" minOccurs="0" />
       </xs:sequence>
       <xs:attribute ref="personID" use="required"/> 
    </xs:complexType>
 
-   <xs:complexType name="childrenType">
+   <xs:complexType name="childType">
       <xs:sequence>
          <xs:element type="xs:string" name="firstName" />
          <xs:element type="xs:string" name="lastName" />

@@ -232,10 +232,10 @@ public class FXMLDocumentController implements Initializable {
              if(node instanceof TextField){
             	 System.out.println(((TextField)node).getText());
 // zrusil som validaciu lebo ved preco to dat ne komplet text fieldy?            	 
-                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
-                    ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
-                    valid = false;
-                 }
+//                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
+//                    ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
+//                    valid = false;
+//                 }
              }
              if(node instanceof DatePicker){
                  if(((DatePicker)node).getValue() == null){ 
@@ -266,13 +266,13 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public Boolean isPersonValid(List<HBox> hb){
-        Boolean valid = true;
+        Boolean valid1 = true;
         for(HBox person : hb){
             if(!isFieldValid(person)){
-                valid = false;
+                valid1 = false;
             }
         }
-        return valid;
+        return valid1;
     }
     
     public void createFields(Person person){

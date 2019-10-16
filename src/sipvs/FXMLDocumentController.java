@@ -114,6 +114,7 @@ public class FXMLDocumentController implements Initializable {
     //new person
     private Person person = new Person();
     
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {        
         //person for test purposes
@@ -286,6 +287,10 @@ public class FXMLDocumentController implements Initializable {
         createPersonFields(person);
         createChildrenFields(person);
     
+        VBox buttonsHBox = new VBox();
+        buttonsHBox.setAlignment(Pos.CENTER);
+        buttonsHBox.setStyle("-fx-padding: 5;");
+        
         saveButton.setText("Uložiť XML");
         saveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -293,7 +298,8 @@ public class FXMLDocumentController implements Initializable {
                 saveXml(event);
             }
         });
-        fieldsPanel.getChildren().add(saveButton);
+        buttonsHBox.getChildren().add(saveButton);
+        
         validateButton.setText("Over XML");
         validateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -301,7 +307,7 @@ public class FXMLDocumentController implements Initializable {
                 validateXmlXsd(event);
             }
         });
-        fieldsPanel.getChildren().add(validateButton);
+        buttonsHBox.getChildren().add(validateButton);
         
         // Prida generuj HTML Button
         gnerateHTMLButton.setText("Generuj HTML");
@@ -311,8 +317,10 @@ public class FXMLDocumentController implements Initializable {
                 showXSLTfromXML(event);         	
             }
         });
-        fieldsPanel.getChildren().add(gnerateHTMLButton);
-        fieldsPanel.setPrefSize(540, 640);
+        buttonsHBox.getChildren().add(gnerateHTMLButton);
+        
+        fieldsPanel.getChildren().add(buttonsHBox);
+        fieldsPanel.setPrefSize(545, 640);
     }
     
     public void createPersonFields(Person person){
@@ -378,7 +386,7 @@ public class FXMLDocumentController implements Initializable {
                 "-fx-border-color: black;"
                 + "-fx-padding: 5;");
                field.setPrefWidth(200);
-               field.setAlignment(Pos.CENTER);
+               field.setAlignment(Pos.CENTER_LEFT);
             for(Node child: field.getChildren()){
                 if(child instanceof Label){
                     child.setStyle("-fx-padding: 5;-fx-font-size:14px;");
@@ -417,9 +425,9 @@ public class FXMLDocumentController implements Initializable {
         Label lb = new Label(label1Text);
         lb.setStyle("-fx-padding: 5;");
         hbox.getChildren().addAll(lb, field);
-        hbox.setStyle("-fx-border-width: 1 0 1 0;" +
+        /*hbox.setStyle("-fx-border-width: 1 0 1 0;" +
                     "-fx-border-color: black;"
-                    + "-fx-padding: 5;");
+                    + "-fx-padding: 5;");*/
         return hbox;
     }
     
@@ -462,9 +470,9 @@ public class FXMLDocumentController implements Initializable {
     public HBox createHBoxRB(Label label, RadioButton rb1, RadioButton rb2, ToggleGroup tg, Boolean selected, Boolean select){
         HBox hbox = new HBox();               
         rb1.setToggleGroup(tg);
-        rb1.setStyle("-fx-padding: 5; -fx-background-color: white;");
+        rb1.setStyle("-fx-padding: 5;");
         rb2.setToggleGroup(tg);
-        rb2.setStyle("-fx-padding: 5; -fx-background-color: white;");
+        rb2.setStyle("-fx-padding: 5;");
         if(selected){
             if(select){
                 rb1.setSelected(true);

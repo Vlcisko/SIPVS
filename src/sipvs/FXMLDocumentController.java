@@ -88,6 +88,7 @@ public class FXMLDocumentController implements Initializable {
     private ToggleGroup statusTG = new ToggleGroup();
     
     //box for all fields = Person and Childrens
+    @FXML
     private VBox fieldsPanel = new VBox();
     
     //list of person boxes 
@@ -134,14 +135,8 @@ public class FXMLDocumentController implements Initializable {
         person.setFirstName(firstName.getText());
         person.setLastName(lastName.getText());
         
+        person.setPersonID(PersonID.getText());
         
-        //if(PersonID.getText().equals("HRXXXXXX") || !PersonID.getText().matches("^[a-zA-Z0-9]{8}")){
-        if(PersonID.getText().equals("HRXXXXXX")){
-            PersonID.setStyle("-fx-background-color: red; -fx-padding: 5;");
-            isPersonIDValid = false;                     
-        }else{
-            person.setPersonID(PersonID.getText()); 
-        }
         
         for(TextField[] child : children){        
             TextField childFirstName = child[0]; 
@@ -231,8 +226,13 @@ public class FXMLDocumentController implements Initializable {
         for(Node node: hb.getChildren()){
              if(node instanceof TextField){
             	 System.out.println(((TextField)node).getText());
-// zrusil som validaciu lebo ved preco to dat ne komplet text fieldy?            	 
-                 if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
+// zrusil som validaciu lebo ved preco to dat ne komplet text fieldy?  
+                if((((TextField)node).equals(PersonID))){
+                   if(((TextField)node).getText().equals("HRXXXXXX") || !((TextField)node).getText().matches("^[a-zA-Z0-9]{8}")){
+                        ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
+                        valid = false;                     
+                    }
+                }else if(!isStringOnlyAlphabet(((TextField)node).getText())){                         
                     ((TextField)node).setStyle("-fx-background-color: red; -fx-padding: 5;");
                     valid = false;
                  }
@@ -276,7 +276,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public void createFields(Person person){
-        root.getChildren().add(fieldsPanel);
+        //root.getChildren().add(fieldsPanel);
         
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(560, 660);
@@ -377,6 +377,7 @@ public class FXMLDocumentController implements Initializable {
                field.setStyle("-fx-border-width: 0 0 1 0;" +
                 "-fx-border-color: black;"
                 + "-fx-padding: 5;");
+               field.setPrefWidth(200);
                field.setAlignment(Pos.CENTER);
             for(Node child: field.getChildren()){
                 if(child instanceof Label){
@@ -389,8 +390,7 @@ public class FXMLDocumentController implements Initializable {
     
     public HBox createHBoxNode(String label1Text,  Node field, String text, Tooltip tooltip){
     	
-        HBox hbox = new HBox();
-        
+        HBox hbox = new HBox();        
         if(field instanceof TextField){
             TextField tf = (TextField)field;
             tf.setText(text);

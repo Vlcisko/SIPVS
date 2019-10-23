@@ -1,18 +1,5 @@
 package sipvs;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.MonthDay;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -22,45 +9,29 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javax.xml.XMLConstants;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -109,7 +80,8 @@ public class FXMLDocumentController implements Initializable {
     //save and validate buttons
     private Button saveButton = new Button();
     private Button validateButton = new Button();
-    private Button gnerateHTMLButton = new Button();
+    private Button generateHTMLButton = new Button();
+    private Button signXMLButton = new Button();
     
     //new person
     private Person person = new Person();
@@ -192,7 +164,19 @@ public class FXMLDocumentController implements Initializable {
                 e.printStackTrace();
         }             
     }
-    
+
+    private void signXML(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("XMLSignerForm.fxml"));
+            Parent validationRoot = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Podpísanie XML");
+            stage.setScene(new Scene(validationRoot));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
     private void showXSLTfromXML(ActionEvent event) {         
         try {
@@ -206,8 +190,8 @@ public class FXMLDocumentController implements Initializable {
             e.printStackTrace();
         }                       
     }
-    
-    
+
+
     public String getToggleSelected(ToggleGroup tg, String text1, String text2){
         if(tg.getSelectedToggle() == null){
             return "";
@@ -310,14 +294,24 @@ public class FXMLDocumentController implements Initializable {
         buttonsHBox.getChildren().add(validateButton);
         
         // Prida generuj HTML Button
-        gnerateHTMLButton.setText("Generuj HTML");
-        gnerateHTMLButton.setOnAction(new EventHandler<ActionEvent>() {
+        generateHTMLButton.setText("Generuj HTML");
+        generateHTMLButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 showXSLTfromXML(event);         	
             }
         });
-        buttonsHBox.getChildren().add(gnerateHTMLButton);
+        buttonsHBox.getChildren().add(generateHTMLButton);
+
+        // Prida podpis XML Button
+        signXMLButton.setText("Podpíš XML");
+        signXMLButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                signXML(event);
+            }
+        });
+        buttonsHBox.getChildren().add(signXMLButton);
         
         fieldsPanel.getChildren().add(buttonsHBox);
         fieldsPanel.setPrefSize(545, 640);

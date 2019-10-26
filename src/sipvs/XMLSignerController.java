@@ -5,21 +5,30 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import sipvs.DSigNetWrapper.DSigNETWrapper;
+import sipvs.DSigNetWrapper.DSigNETXmlPluginWrapper;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
+
 
 public class XMLSignerController implements Initializable {
 
     @FXML
-    private Label pathXML;
+    private Label pathXML = null;
 
     @FXML
-    private Label pathXSL;
+    private Label pathXSL = null;
 
     @FXML
-    private Label pathXSD;
+    private Label pathXSD = null;
 
     File selectedXslFile;
     File selectedXmlFile;
@@ -34,7 +43,6 @@ public class XMLSignerController implements Initializable {
 
     @FXML
     private void loadXML() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML súbor (*.xml)", "*.xml"));
 
@@ -43,17 +51,13 @@ public class XMLSignerController implements Initializable {
         if(selectedXmlFile != null){
             String path = selectedXmlFile.getAbsolutePath().toString();
             if(!path.substring(path.length() - 3).equals("xml")) {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Vložte súbor s príponou XML");
-                alert.showAndWait();
+                showAlert("Vložte súbor s príponou XML");
                 selectedXmlFile = null;
             }else {
                 pathXML.setText(path);
             }
         }else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("XML súbor sa nenašiel");
-            alert.showAndWait();
+            showAlert("XML súbor sa nenašiel");
         }
     }
 
@@ -66,17 +70,13 @@ public class XMLSignerController implements Initializable {
         if(selectedXslFile != null){
             String path = selectedXslFile.getAbsolutePath().toString();
             if(!path.substring(path.length() - 3).equals("xsl")) {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Vložte súbor s príponou XSL");
-                alert.showAndWait();
+                showAlert("Vložte súbor s príponou XSL");
                 selectedXslFile = null;
             }else {
                 pathXSL.setText(path);
             }
         }else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("XSL súbor sa nenašiel");
-            alert.showAndWait();
+            showAlert("XSL súbor sa nenašiel");
         }
     }
 
@@ -86,27 +86,118 @@ public class XMLSignerController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XSD súbor (*.xsd)", "*.xsd"));
 
-        selectedXmlFile = fileChooser.showOpenDialog(null);
+        selectedXsdFile = fileChooser.showOpenDialog(null);
 
-        if(selectedXmlFile != null){
-            String path = selectedXmlFile.getAbsolutePath().toString();
+        if(selectedXsdFile != null){
+            String path = selectedXsdFile.getAbsolutePath().toString();
             if(!path.substring(path.length() - 3).equals("xsd")) {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Vložte súbor s príponou XSD");
-                alert.showAndWait();
-                selectedXmlFile = null;
+                showAlert("Vložte súbor s príponou XSD");
+                selectedXsdFile = null;
             }else {
-                pathXML.setText(path);
+                pathXSD.setText(path);
             }
         }else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("XSD súbor sa nenašiel");
-            alert.showAndWait();
+            showAlert("XSD súbor sa nenašiel");
         }
     }
 
     @FXML
-    public void signFiles() {
+    public void signFiles() throws Exception {
+
+        //if(selectedXmlFile != null && selectedXsdFile != null && selectedXslFile != null) {
+        if(true) {
+            //testovacie data
+            pathXML.setText("C:\\praca\\SIPVS\\data\\test.xml");
+            pathXSD.setText("C:\\praca\\SIPVS\\data\\person.xsd");
+            pathXSL.setText("C:\\praca\\SIPVS\\data\\DESIGN.xsl");
+
+            DSigNETWrapper dsigXades = new DSigNETWrapper();
+            DSigNETXmlPluginWrapper xmlPlugin = new DSigNETXmlPluginWrapper();
+
+            Object xmlObject = xmlPlugin.CreateObject("id",
+                    "XML",
+                    readFile(pathXML.getText()),
+                    readFile(pathXSD.getText()),
+                    "",
+                    "https://something.com/example.xsd",
+                    readFile(pathXSL.getText()),
+                    "https://something.com/example.xsl"
+            );
+
+            if (xmlObject == null) {
+                showAlert("Chyba pri načítaní súborov: " + xmlPlugin.getErrorMessage());
+                return;
+            }
+
+            int resOfAdd = dsigXades.AddObject(xmlObject);
+
+            if (resOfAdd != 0) {
+                showAlert("Chyba pri spúštaní DSig.Xades: " + dsigXades.getErrorMessage());
+                return;
+            }
+
+            int resOfSign = dsigXades.Sign("SIPVS_Ditec", "sha256", "urn:oid:1.3.158.36061701.1.2.2");
+
+            if (resOfSign != 0) {
+                showAlert("Chyba pri prihlasovaní DSig.Xades: " + dsigXades.getErrorMessage());
+                return;
+            } else {
+                showAlert("XML úspešne podpísané, riadenie programu bude presmerované. Zvoľte lokáciu pre uloženie súboru.");
+                saveSignedXML(dsigXades.getSignedXmlWithEnvelope());
+            }
+        }
+        else {
+            showAlert("Neboli vybrané správne súbory .xml, .xsd a .xsl(t).");
+        }
     }
 
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(message);
+        alert.showAndWait();
+    }
+
+    private String readFile(String path) {
+
+        byte[] encoded;
+
+        try {
+            encoded = Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+        return new String(encoded, Charset.defaultCharset());
+    }
+
+    private void saveSignedXML(String xmlFile) {
+        if (xmlFile == null) {
+            showAlert("Nemožno uložiť prázdny dokument.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML súbor (*.xml)", "*.xml"));
+        File saveXmlFile = fileChooser.showSaveDialog(null);
+
+        BufferedWriter bWriter = null;
+        String outputFileName = saveXmlFile.getAbsolutePath();
+        try {
+            bWriter = new BufferedWriter(new FileWriter(outputFileName));
+            bWriter.write(xmlFile);
+            return;
+        } catch (IOException ex) {
+            showAlert("Nie je možné uložiť súbor: " + ex);
+        } finally {
+            if (bWriter != null) {
+                try {
+                    bWriter.close();
+                    showAlert("Súbor bol úspešné uložený.Nájdete ho v: " + outputFileName);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
 }

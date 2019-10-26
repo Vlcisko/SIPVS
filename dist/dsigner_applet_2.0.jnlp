@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<jnlp spec="1.6+" xmlns:jfx="http://javafx.com" codebase="https://www.slovensko.sk/static/zep/java_apps/" href="dsigner_applet_2.0.jnlp">
+	<information>
+		<title>D.Signer/XAdES Java</title>
+		<vendor>DITEC, a.s.</vendor>
+		<description>D.Signer/XAdES Java</description>
+		<icon href="dsigner16.png" width="16" height="16" />
+		<icon href="dsigner24.png" width="24" height="24" />
+		<icon href="dsigner32.png" width="32" height="32" />
+		<icon href="dsigner48.png" width="48" height="48" />
+		<icon href="dsigner64.png" width="64" height="64" />
+		<icon href="dsigner128.png" width="128" height="128" />
+		<icon href="dsigner256.png" width="256" height="256" />
+		<offline-allowed />
+	</information>
+
+	<security>
+		<all-permissions />
+	</security>
+
+	<update check="always" policy="always" />
+
+	<resources>
+		<j2se version="1.6+" java-vm-args="--add-modules=java.xml.bind  --add-exports=jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED --add-exports=jdk.crypto.cryptoki/sun.security.pkcs11=ALL-UNNAMED --add-exports=java.base/sun.security.rsa=ALL-UNNAMED" />
+		<property name="jnlp.versionEnabled" value="true" />
+		<property name="jnlp.packEnabled" value="true" />
+
+		<!-- Core max-heap-size="1024m" -->
+		<jar href="dsigner-2.0.0.17-A2D004.jar" main="true" version="1" />
+		<jar href="dsigner-config-2.4-A2D004.jar" version="1" />
+		
+		<jar href="slf4j-simple-1.7.10-A2D004.jar" version="1" />
+		<jar href="slf4j-api-1.7.10-A2D004.jar" version="1" />		
+
+		<jar href="bcpkix-jdk15on-1.54.1-A2D004.jar" version="1" />
+		<jar href="bcprov-jdk15on-1.54.1-A2D004.jar" version="1" />
+		<jar href="JTattoo-1.6.10-A2D004.jar" version="1" />
+		
+		<jar href="xalan-2.7.2-A2D004.jar" version="1" />
+		<jar href="xmlsec-2.0.6-A2D004.jar" version="1" />
+		
+		<!--  Apache Xerces -->
+		<jar href="serializer-2.11.0-A2D004.jar" version="1" />
+		<jar href="xml-apis-2.11.0-A2D004.jar" version="1" />
+		<jar href="xercesImpl-2.11.0-A2D004.jar" version="1" />		
+
+		<!-- TXT plugin -->
+		<jar href="dsigner-plugin-txt-2.0.0.17-A2D004.jar" version="1" />
+
+		<!-- PNG plugin -->
+		<jar href="dsigner-plugin-png-2.0.0.17-A2D004.jar" version="1" />
+	</resources>
+
+	<resources os="Windows">
+		<nativelib href="ditecmscapi-1.1-A2D004.jar" version="1" />
+		<jar href="ditecmscapi-1.1-A2D004.jar" version="1" />
+	</resources>
+
+	<!-- xmlplugin -->
+	<resources>
+		<jfx:javafx-runtime version="2.1+" />
+		<jar href="dsigner-plugin-xml-2.0.0.17-A2D004.jar" version="1" />
+		<jar href="jsoup-1.8.3-A2D004.jar" version="1" />		
+	</resources>
+
+	<!-- PDF plugin -->
+	<resources>
+		<jar href="dsigner-plugin-pdf-2.0.0.17-A2D004.jar" version="1" />
+	</resources>
+	
+	<resources os="Windows" arch="i386 x86">
+		<nativelib href="libPDFNetC-windows-x86-7.0.1-A2D004.jar" version="1" />
+		<jar href="PDFNet-windows-x86-7.0.1-A2D004.jar" version="1" />
+	</resources>
+
+	<resources os="Windows" arch="amd64 x86_64">
+		<nativelib href="libPDFNetC-windows-x64-7.0.1-A2D004.jar" version="1" />
+		<jar href="PDFNet-windows-x64-7.0.1-A2D004.jar" version="1" />
+	</resources>
+
+	<resources os="Linux" arch="i386 x86">
+		<nativelib href="libPDFNetC-linux-x86-7.0.1-A2D004.jar" version="1" />
+		<jar href="PDFNet-linux-x86-7.0.1-A2D004.jar" version="1" />
+	</resources>
+
+	<resources os="Linux" arch="amd64 x86_64">
+		<nativelib href="libPDFNetC-linux-x64-7.0.1-A2D004.jar" version="1" />
+		<jar href="PDFNet-linux-x64-7.0.1-A2D004.jar" version="1" />
+	</resources>
+
+	<resources os="Mac\ OS\ X">
+		<nativelib href="libPDFNetC-osx-7.0.2-A2D004.jar" version="1" />
+		<jar href="PDFNet-osx-7.0.2-A2D004.jar" version="1" />
+	</resources>
+
+	<applet-desc name="D.Signer/XAdES Java" main-class="sk.ditec.zep.dsigner.xades.applet.XadesSigApplet" width="1" height="1" />
+</jnlp>

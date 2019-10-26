@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person personID="ES456874">
+    <firstName>Test</firstName>
+    <lastName>Test</lastName>
+    <gender>muz</gender>
+    <birthDate>2012-10-24</birthDate>
+    <status>zenaty</status>
+    <child>
+        <firstName>fad</firstName>
+        <lastName>af</lastName>
+    </child>
+</person>

@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 public abstract class AbstractDSigNETWrapper {
 
-	private static final String JACOB_FILE_X86 = "jacob-1.19-x86.dll";
+	private static final String JACOB_FILE_X64 = "jacob-1.19-x64.dll";
 	
 	protected ActiveXComponent dsig_app;
 
@@ -28,7 +28,7 @@ public abstract class AbstractDSigNETWrapper {
 		File temporaryDll = null;
 		InputStream inputStream = null;
 		try {
-			inputStream =  getClass().getResourceAsStream("/dll/" + JACOB_FILE_X86);
+			inputStream =  getClass().getResourceAsStream("/dll/" + JACOB_FILE_X64);
 			temporaryDll = createTmpResource(inputStream);
 
 			System.setProperty(LibraryLoader.JACOB_DLL_PATH, temporaryDll.getAbsolutePath());

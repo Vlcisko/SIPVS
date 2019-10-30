@@ -114,14 +114,15 @@ public class XMLSignerController implements Initializable {
             DSigNETWrapper dsigXades = new DSigNETWrapper();
             DSigNETXmlPluginWrapper xmlPlugin = new DSigNETXmlPluginWrapper();
 
-            Object xmlObject = xmlPlugin.CreateObject("id",
+            Object xmlObject = xmlPlugin.CreateObject2("id",
                     "XML",
                     readFile(pathXML.getText()),
                     readFile(pathXSD.getText()),
                     "",
                     "https://something.com/example.xsd",
                     readFile(pathXSL.getText()),
-                    "https://something.com/example.xsl"
+                    "https://something.com/example.xsl",
+                    "HTML"
             );
 
             if (xmlObject == null) {

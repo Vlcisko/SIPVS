@@ -17,7 +17,7 @@ import java.io.IOException;
 	}
 	
 	public Object CreateObject2(String objectId, String objectDescription, String sourceXml, String sourceXsd, String namespaceUri, String xsdReference, String sourceXsl, String xslReference, String transformType){
-		return Dispatch.call(dsig_app, "CreateObject2", objectId, objectDescription, sourceXml, sourceXsd, namespaceUri, xsdReference, sourceXsl, xslReference);
+		return Dispatch.call(dsig_app, "CreateObject2", objectId, objectDescription, sourceXml, sourceXsd, namespaceUri, xsdReference, sourceXsl, xslReference, transformType);
 	}
 	
 	public String getErrorMessage() {

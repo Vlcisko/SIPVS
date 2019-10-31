@@ -15,3 +15,7 @@
 	C:\Windows\Microsoft.NET\Framework\v4.0.30319\RegAsm.exe /verbose /nologo /codebase "C:\Program Files\Ditec\DSigner .NET\Ditec.Zep.DSigXades.XmlPlugin.dll"
 ```
 4. build app
+
+## EXTRA
+- Ak by JavaFx hadzalo nejake errory, treba stiahnut javaFX a skopirovat obsah zlozky \bin do \bin zlozky, ktoru mate vo windowse ulozenu ako java PATH, teda napr. "C:\Program Files\Java\jdk-13.0.1\bin"
+	http://gluonhq.com/download/javafx-13.0.1-sdk-windows/

@@ -33,6 +33,9 @@ public class XMLSignerController implements Initializable {
     File selectedXslFile;
     File selectedXmlFile;
     File selectedXsdFile;
+
+    String workingDirectoryPath = System.getProperty("user.dir");
+
     /**
      * Initializes the controller class.
      */
@@ -44,19 +47,20 @@ public class XMLSignerController implements Initializable {
     @FXML
     private void loadXML() {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(workingDirectoryPath));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML súbor (*.xml)", "*.xml"));
 
         selectedXmlFile = fileChooser.showOpenDialog(null);
 
-        if(selectedXmlFile != null){
-            String path = selectedXmlFile.getAbsolutePath().toString();
-            if(!path.substring(path.length() - 3).equals("xml")) {
+        if (selectedXmlFile != null) {
+            String path = selectedXmlFile.getAbsolutePath();
+            if (!path.substring(path.length() - 3).equals("xml")) {
                 showAlert("Vložte súbor s príponou XML");
                 selectedXmlFile = null;
-            }else {
+            } else {
                 pathXML.setText(path);
             }
-        }else {
+        } else {
             showAlert("XML súbor sa nenašiel");
         }
     }
@@ -65,17 +69,18 @@ public class XMLSignerController implements Initializable {
     private void loadXSL() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(workingDirectoryPath));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XSL súbor (*.xsl)", "*.xsl"));
         selectedXslFile = fileChooser.showOpenDialog(null);
-        if(selectedXslFile != null){
-            String path = selectedXslFile.getAbsolutePath().toString();
-            if(!path.substring(path.length() - 3).equals("xsl")) {
+        if (selectedXslFile != null) {
+            String path = selectedXslFile.getAbsolutePath();
+            if (!path.substring(path.length() - 3).equals("xsl")) {
                 showAlert("Vložte súbor s príponou XSL");
                 selectedXslFile = null;
-            }else {
+            } else {
                 pathXSL.setText(path);
             }
-        }else {
+        } else {
             showAlert("XSL súbor sa nenašiel");
         }
     }
@@ -84,19 +89,21 @@ public class XMLSignerController implements Initializable {
     private void loadXSD() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(workingDirectoryPath));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XSD súbor (*.xsd)", "*.xsd"));
+
 
         selectedXsdFile = fileChooser.showOpenDialog(null);
 
-        if(selectedXsdFile != null){
-            String path = selectedXsdFile.getAbsolutePath().toString();
-            if(!path.substring(path.length() - 3).equals("xsd")) {
+        if (selectedXsdFile != null) {
+            String path = selectedXsdFile.getAbsolutePath();
+            if (!path.substring(path.length() - 3).equals("xsd")) {
                 showAlert("Vložte súbor s príponou XSD");
                 selectedXsdFile = null;
-            }else {
+            } else {
                 pathXSD.setText(path);
             }
-        }else {
+        } else {
             showAlert("XSD súbor sa nenašiel");
         }
     }
@@ -105,11 +112,12 @@ public class XMLSignerController implements Initializable {
     public void signFiles() throws Exception {
 
         //if(selectedXmlFile != null && selectedXsdFile != null && selectedXslFile != null) {
-        if(true) {
+        if (true) {
             //testovacie data
-            pathXML.setText("C:\\praca\\SIPVS\\data\\test.xml");
-            pathXSD.setText("C:\\praca\\SIPVS\\data\\person.xsd");
-            pathXSL.setText("C:\\praca\\SIPVS\\data\\DESIGN.xsl");
+            String workingDirectory = System.getProperty("user.dir");
+            pathXML.setText(workingDirectory + "\\data\\test.xml");
+            pathXSD.setText(workingDirectory + "\\data\\test.xsd");
+            pathXSL.setText(workingDirectory + "\\data\\test.xsl");
 
             DSigNETWrapper dsigXades = new DSigNETWrapper();
             DSigNETXmlPluginWrapper xmlPlugin = new DSigNETXmlPluginWrapper();
@@ -146,8 +154,7 @@ public class XMLSignerController implements Initializable {
                 showAlert("XML úspešne podpísané, riadenie programu bude presmerované. Zvoľte lokáciu pre uloženie súboru.");
                 saveSignedXML(dsigXades.getSignedXmlWithEnvelope());
             }
-        }
-        else {
+        } else {
             showAlert("Neboli vybrané správne súbory .xml, .xsd a .xsl(t).");
         }
     }

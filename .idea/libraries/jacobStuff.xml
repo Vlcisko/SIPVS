@@ -1,6 +1,8 @@
 <component name="libraryTable">
-  <library name="dll">
-    <CLASSES />
+  <library name="jacobStuff">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/sipvs/rescources/dll/jacob.jar!/" />
+    </CLASSES>
     <JAVADOC />
     <NATIVE>
       <root url="file://$PROJECT_DIR$/src/sipvs/rescources/dll" />

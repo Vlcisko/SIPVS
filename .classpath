@@ -2,5 +2,26 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="plugins/ant-xalan1-1.6.5.jar"/>
+	<classpathentry kind="lib" path="plugins/bcpkix-jdk15on-1.54.1-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/bcprov-jdk15on-1.54.1-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="plugins/ditecmscapi-1.1-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/dsigner-2.0.0.13-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/dsigner-plugin-pdf-2.0.0.13-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/dsigner-plugin-png-2.0.0.13-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/dsigner-plugin-txt-2.0.0.13-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/dsigner-plugin-xml-2.0.0.13-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/jaxb-api-2.2.11.jar"/>
+	<classpathentry kind="lib" path="plugins/jaxb-core-2.2.11.jar"/>
+	<classpathentry kind="lib" path="plugins/jsoup-1.8.3-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/JTattoo-1.6.10-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/libPDFNetC-windows-x86-6.3.0-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/PDFNet-windows-x86-6.3.0-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/serializer-2.11.0-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/slf4j-api-1.7.10-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/slf4j-simple-1.7.10-DEE492.jar"/>
+	<classpathentry kind="lib" path="plugins/xmlsec-1.3.0.jar"/>
+	<classpathentry kind="lib" path="plugins/jacob/jacob-1.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

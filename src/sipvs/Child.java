@@ -26,6 +26,8 @@ public class Child {
         this.lastName = "";
     }
 
+    ;
+
     public Child(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;

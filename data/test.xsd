@@ -2,40 +2,40 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-   <!--Elements-->
-   <xs:element name="person" type="personType" />
-   <!--End Elements-->
+    <!--Elements-->
+    <xs:element name="person" type="personType"/>
+    <!--End Elements-->
 
-  <!--Attributes-->
-  <xs:attribute name="personID" type="personIDType"/>
-  <!--End Attributes-->
+    <!--Attributes-->
+    <xs:attribute name="personID" type="personIDType"/>
+    <!--End Attributes-->
 
 
-   <xs:complexType name="personType">
-      <xs:sequence>
-         <xs:element type="xs:string" name="firstName" minOccurs="0" />
-         <xs:element type="xs:string" name="lastName" />
-         <xs:element type="xs:string" name="gender" />
-         <xs:element type="xs:date" name="birthDate" />
-         <xs:element type="xs:string" name="status" />
-         <xs:element type="childType" name="child" maxOccurs="unbounded" minOccurs="0" />
-      </xs:sequence>
-      <xs:attribute ref="personID" use="required"/> 
-   </xs:complexType>
+    <xs:complexType name="personType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="firstName" minOccurs="0"/>
+            <xs:element type="xs:string" name="lastName"/>
+            <xs:element type="xs:string" name="gender"/>
+            <xs:element type="xs:date" name="birthDate"/>
+            <xs:element type="xs:string" name="status"/>
+            <xs:element type="childType" name="child" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute ref="personID" use="required"/>
+    </xs:complexType>
 
-   <xs:complexType name="childType">
-      <xs:sequence>
-         <xs:element type="xs:string" name="firstName" />
-         <xs:element type="xs:string" name="lastName" />
-      </xs:sequence>
-   </xs:complexType>
+    <xs:complexType name="childType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="firstName"/>
+            <xs:element type="xs:string" name="lastName"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<!--Restriction person_id as the ID card has 8 places-->
-<xs:simpleType name="personIDType">
-	<xs:restriction base="xs:string">
-    <xs:pattern value="[a-zA-Z0-9]{8}"/>
-	</xs:restriction>
-</xs:simpleType>
-<!--End Restrictions-->
+    <!--Restriction person_id as the ID card has 8 places-->
+    <xs:simpleType name="personIDType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9]{8}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <!--End Restrictions-->
 
 </xs:schema>

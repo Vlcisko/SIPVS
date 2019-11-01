@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 /**
  * @author vlkpa
  */
-public class FXMLDocumentController implements Initializable {
+public class XmlFormController implements Initializable {
 
     @FXML
     private AnchorPane root;
@@ -56,8 +56,6 @@ public class FXMLDocumentController implements Initializable {
     private RadioButton marriedRB = new RadioButton("Ženatý");
     private RadioButton singleRB = new RadioButton("Slobodný");
     private ToggleGroup statusTG = new ToggleGroup();
-    final static String workingDirectoryPath = System.getProperty("user.dir");
-
 
     //box for all fields = Person and Childrens
     @FXML
@@ -80,13 +78,21 @@ public class FXMLDocumentController implements Initializable {
 
     //save and validate buttons
     private Button saveButton = new Button();
+    private Button loadFiles = new Button();
     private Button validateButton = new Button();
-    private Button generateHTMLButton = new Button();
-    private Button signXMLButton = new Button();
+    private Button signButton = new Button();
+    private Button gnerateHTMLButton = new Button();
 
     //new person
     private Person person = new Person();
 
+    public File xmlFile;
+    public File xsdFile;
+    public File xslFile;
+
+    public Label xmlString = new Label();
+    public Label xsdString = new Label();
+    public Label xslString = new Label();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -97,6 +103,14 @@ public class FXMLDocumentController implements Initializable {
         children.add(ondrej);
         children.add(lucia);
         Person tomas = new Person("Tomas", "Julius", "2019-10-18", "zenaty", "muz", "HR123456", children);
+
+        xmlFile = new File(Main.workingDirectoryPath + "\\data\\test.xml");
+        xsdFile = new File(Main.workingDirectoryPath + "\\data\\test.xsd");
+        xslFile = new File(Main.workingDirectoryPath + "\\data\\test.xsl");
+
+        xmlString.setText("XML: " + xmlFile.getAbsolutePath());
+        xsdString.setText("XSD: " + xsdFile.getAbsolutePath());
+        xslString.setText("XSL: " + xslFile.getAbsolutePath());
 
         //create fields for new person
         createFields(person);
@@ -133,10 +147,8 @@ public class FXMLDocumentController implements Initializable {
 
         if (isPersonValid(fieldsPerson) && areChildrenValid && isPersonIDValid) {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File(workingDirectoryPath));
-
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Xml file (*.xml)", "*.xml"));
-            File saveXmlFile = fileChooser.showSaveDialog(root.getScene().getWindow());
+            File saveXmlFile = fileChooser.showSaveDialog((Stage) root.getScene().getWindow());
             person.printPerson();
             if (saveXmlFile != null) {
                 jaxbObjectToXML(person, saveXmlFile);
@@ -156,39 +168,76 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void validateXmlXsd(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ValidationForm.fxml"));
-            Parent validationRoot = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Validácia XML-XSD");
-            stage.setScene(new Scene(validationRoot));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (xmlFile != null && xsdFile != null) {
+            ValidationXml_Xsd validation = new ValidationXml_Xsd();
+            validation.validateXML_XSD(xmlFile, xsdFile);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Generácia sa nezdarila");
+            alert.setContentText("Pre validovanie je potrebné vybrať súbor XML a XSD");
+            alert.showAndWait();
         }
     }
 
-    private void signXML(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("XMLSignerForm.fxml"));
-            Parent validationRoot = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Podpísanie XML");
-            stage.setScene(new Scene(validationRoot));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void sign(ActionEvent event) {
+        if (xmlFile != null && xsdFile != null && xslFile != null) {
+            XMLSignerController xmlSigner = new XMLSignerController();
+            try {
+                xmlSigner.signFiles(xmlFile, xsdFile, xslFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Podpísanie sa nezdarilo");
+            alert.setContentText("Pre podpis je potrebné vybrať súbor XML, XSD a XSL");
+            alert.showAndWait();
         }
+
+
     }
 
     private void showXSLTfromXML(ActionEvent event) {
+        if (xmlFile != null && xslFile != null) {
+            HtmlCreator htmlCreator = new HtmlCreator();
+            htmlCreator.createHTML(xmlFile, xslFile);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Generácia sa nezdarila");
+            alert.setContentText("Pre validovanie je potrebné vybrať súbor XML a XSL");
+            alert.showAndWait();
+        }
+    }
+
+    private void loadFiles(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("HTMLGeneratorForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoadFilesForm.fxml"));
             Parent validationRoot = loader.load();
+            LoadFilesFormController loadeFiledCotroller = loader.getController();
+
+            if (xmlFile != null) loadeFiledCotroller.setXmlFileObjProperty(xmlFile);
+            loadeFiledCotroller.currentXmlFileObjProperty().addListener((obs, oldFile, newFile) -> {
+                xmlFile = newFile;
+                xmlString.setText("XML: " + newFile.getAbsolutePath());
+            });
+
+            if (xsdFile != null) loadeFiledCotroller.setXsdFileObjProperty(xslFile);
+            loadeFiledCotroller.currentXsdFileObjProperty().addListener((obs, oldFile, newFile) -> {
+                xsdFile = newFile;
+                xsdString.setText("XSD: " + newFile.getAbsolutePath());
+            });
+
+            if (xslFile != null) loadeFiledCotroller.setXslFileObjProperty(xslFile);
+            loadeFiledCotroller.currentXslFileObjProperty().addListener((obs, oldFile, newFile) -> {
+                xslFile = newFile;
+                xslString.setText("XSL: " + newFile.getAbsolutePath());
+            });
+
             Stage stage = new Stage();
             stage.setTitle("Generovanie HTML");
             stage.setScene(new Scene(validationRoot));
-            stage.show();
+            stage.resizableProperty().setValue(false);
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -215,19 +264,19 @@ public class FXMLDocumentController implements Initializable {
             if (node instanceof TextField) {
                 System.out.println(((TextField) node).getText());
 // zrusil som validaciu lebo ved preco to dat ne komplet text fieldy?  
-                if ((node.equals(PersonID))) {
+                if ((((TextField) node).equals(PersonID))) {
                     if (((TextField) node).getText().equals("HRXXXXXX") || !((TextField) node).getText().matches("^[a-zA-Z0-9]{8}")) {
-                        node.setStyle("-fx-background-color: red; -fx-padding: 5;");
+                        ((TextField) node).setStyle("-fx-background-color: red; -fx-padding: 5;");
                         valid = false;
                     }
                 } else if (!isStringOnlyAlphabet(((TextField) node).getText())) {
-                    node.setStyle("-fx-background-color: red; -fx-padding: 5;");
+                    ((TextField) node).setStyle("-fx-background-color: red; -fx-padding: 5;");
                     valid = false;
                 }
             }
             if (node instanceof DatePicker) {
                 if (((DatePicker) node).getValue() == null) {
-                    node.setStyle("-fx-background-color: red; -fx-padding: 5;");
+                    ((DatePicker) node).setStyle("-fx-background-color: red; -fx-padding: 5;");
                     valid = false;
                 }
             }
@@ -298,25 +347,37 @@ public class FXMLDocumentController implements Initializable {
         buttonsHBox.getChildren().add(validateButton);
 
         // Prida generuj HTML Button
-        generateHTMLButton.setText("Generuj HTML");
-        generateHTMLButton.setOnAction(new EventHandler<ActionEvent>() {
+        gnerateHTMLButton.setText("Generuj HTML");
+        gnerateHTMLButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 showXSLTfromXML(event);
             }
         });
-        buttonsHBox.getChildren().add(generateHTMLButton);
+        buttonsHBox.getChildren().add(gnerateHTMLButton);
 
-        // Prida podpis XML Button
-        signXMLButton.setText("Podpíš XML");
-        signXMLButton.setOnAction(new EventHandler<ActionEvent>() {
+        // Prida generuj HTML Button
+        signButton.setText("Podpis");
+        signButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                signXML(event);
+                sign(event);
             }
         });
-        buttonsHBox.getChildren().add(signXMLButton);
+        buttonsHBox.getChildren().add(signButton);
 
+        loadFiles.setText("Vlož súbory");
+        loadFiles.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                loadFiles(event);
+            }
+        });
+        buttonsHBox.getChildren().add(loadFiles);
+
+        buttonsHBox.getChildren().add(xmlString);
+        buttonsHBox.getChildren().add(xsdString);
+        buttonsHBox.getChildren().add(xslString);
         fieldsPanel.getChildren().add(buttonsHBox);
         fieldsPanel.setPrefSize(545, 640);
     }
@@ -455,7 +516,7 @@ public class FXMLDocumentController implements Initializable {
 
     public HBox createHBoxChild(String label1Text, String firstName, String lastName, Tooltip tooltip) {
         HBox hbox = new HBox();
-        TextField[] fields = new TextField[2];
+        TextField fields[] = new TextField[2];
         fields[0] = new TextField();
         fields[1] = new TextField();
         hbox.getChildren().addAll(new Label(label1Text), createHBoxNode("Meno", fields[0], firstName, tooltip));

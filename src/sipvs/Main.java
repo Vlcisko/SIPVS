@@ -14,10 +14,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static String workingDirectoryPath = System.getProperty("user.dir");
+
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("XmlForm.fxml"));
 
         Scene scene = new Scene(root);
 

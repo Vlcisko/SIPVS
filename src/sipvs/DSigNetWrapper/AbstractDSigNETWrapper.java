@@ -1,14 +1,15 @@
 package sipvs.DSigNetWrapper;
 
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.LibraryLoader;
+import sipvs.Main;
 
 import java.io.*;
 
 public abstract class AbstractDSigNETWrapper {
 
     private static final String JACOB_FILE_X64 = "jacob-1.19-x64.dll";
-    private static final String workingDirectoryPath = System.getProperty("user.dir");
 
     protected ActiveXComponent dsig_app;
 
@@ -26,10 +27,10 @@ public abstract class AbstractDSigNETWrapper {
         File temporaryDll = null;
         InputStream inputStream = null;
         try {
-
-            File initialFile = new File(workingDirectoryPath + "\\src\\sipvs\\rescources\\dll\\jacob-1.19-x64.dll");
+            String path = Main.workingDirectoryPath + "\\src\\sipvs\\rescources\\dll\\jacob-1.19-x64.dll";
+            File initialFile = new File(path);
             inputStream = new FileInputStream(initialFile);
-            //inputStream = getClass().getResourceAsStream("/dll/" + JACOB_FILE_X64);
+            //inputStream =  getClass().getResourceAsStream(path);
             temporaryDll = createTmpResource(inputStream);
 
             System.setProperty(LibraryLoader.JACOB_DLL_PATH, temporaryDll.getAbsolutePath());

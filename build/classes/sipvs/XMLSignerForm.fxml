@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<AnchorPane id="AnchorPane" prefHeight="309.0" prefWidth="363.0" xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/8" fx:controller="sipvs.ValidationFormController">
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="sipvs.XMLSignerController"
+            prefHeight="400.0" prefWidth="600.0">
     <children>
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="TOP_CENTER" prefHeight="47.0" prefWidth="363.0">
                     <children>
-                        <Label text="Validácia XML-XSD">
+                        <Label text="Podpisovanie XML pomocou XADES">
                             <HBox.margin>
                                 <Insets top="10.0"/>
                             </HBox.margin>
@@ -42,7 +47,29 @@
                                 </Label>
                             </children>
                         </HBox>
-                        <Button mnemonicParsing="false" onAction="#loadXML" text="Vyber XML"/>
+                        <Button fx:id="loadXML" mnemonicParsing="false" onAction="#loadXML" text="Vyber XML"/>
+                    </children>
+                </VBox>
+                <VBox alignment="TOP_CENTER" prefHeight="94.0" prefWidth="363.0">
+                    <children>
+                        <Label text="Načítaj XSL">
+                            <VBox.margin>
+                                <Insets bottom="10.0" top="10.0"/>
+                            </VBox.margin>
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="320.0">
+                            <children>
+                                <Label fx:id="pathXSL">
+                                    <HBox.margin>
+                                        <Insets left="40.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <Button mnemonicParsing="false" onAction="#loadXSL" text="Vyber XSL"/>
                     </children>
                 </VBox>
                 <VBox alignment="TOP_CENTER" prefHeight="94.0" prefWidth="363.0">
@@ -69,10 +96,11 @@
                 </VBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#validateXmlXsd" text="Odoslať"/>
+                        <Button mnemonicParsing="false" onAction="#signFiles" text="Podpísať"/>
                     </children>
                 </HBox>
             </children>
         </VBox>
     </children>
+
 </AnchorPane>

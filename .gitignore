@@ -11,7 +11,7 @@
 .mtj.tmp/
 
 # Ignore InteliJConfig
-.idea
+#.idea
 
 # Package Files #
 *.war

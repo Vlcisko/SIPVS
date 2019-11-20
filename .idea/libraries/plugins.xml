@@ -1,7 +1,6 @@
 <component name="libraryTable">
   <library name="plugins">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/plugins/ant-xalan1-1.6.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/bcpkix-jdk15on-1.54.1-DEE492.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/bcprov-jdk15on-1.54.1-DEE492.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/commons-logging-1.2.jar!/" />
@@ -20,8 +19,6 @@
       <root url="jar://$PROJECT_DIR$/plugins/javax.servlet.jsp.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/javax.servlet.jsp.jstl.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/javax.transaction.jar!/" />
-      <root url="jar://$PROJECT_DIR$/plugins/jaxb-api-2.2.11.jar!/" />
-      <root url="jar://$PROJECT_DIR$/plugins/jaxb-core-2.2.11.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/jsoup-1.8.3-DEE492.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/JTattoo-1.6.10-DEE492.jar!/" />
       <root url="jar://$PROJECT_DIR$/plugins/PDFNet-windows-x86-6.3.0-DEE492.jar!/" />

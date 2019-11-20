@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<person personID="ES456874">
-    <firstName>Test</firstName>
-    <lastName>Test</lastName>
+<person personID="HR123456">
+    <firstName>David</firstName>
+    <lastName>Csomor</lastName>
     <gender>muz</gender>
-    <birthDate>2012-10-24</birthDate>
-    <status>zenaty</status>
+    <birthDate>2019-10-02</birthDate>
+    <status>slobodny</status>
     <child>
-        <firstName>fad</firstName>
-        <lastName>af</lastName>
+        <firstName>Martin</firstName>
+        <lastName>hucko</lastName>
+    </child>
+    <child>
+        <firstName>Peter</firstName>
+        <lastName>Nagy</lastName>
     </child>
 </person>

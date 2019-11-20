@@ -1,12 +1,13 @@
 <component name="libraryTable">
   <library name="jacobStuff">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/src/sipvs/rescources/dll/jacob.jar!/" />
+      <root url="file://$PROJECT_DIR$/src/main/resources/dll" />
     </CLASSES>
     <JAVADOC />
     <NATIVE>
-      <root url="file://$PROJECT_DIR$/src/sipvs/rescources/dll" />
+      <root url="file://$PROJECT_DIR$/src/main/resources/dll" />
     </NATIVE>
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/src/main/resources/dll" recursive="false" />
   </library>
 </component>

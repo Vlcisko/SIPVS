@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<person>
-    <birthDate>2019-10-12</birthDate>
-    <firstName>David</firstName>
-    <gender>muz</gender>
-    <lastName>Csomor</lastName>
-    <personID>HR123456</personID>
-    <status>slobodny</status>
-</person>

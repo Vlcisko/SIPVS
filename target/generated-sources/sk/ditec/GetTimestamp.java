@@ -6,11 +6,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType&gt;
@@ -27,36 +29,30 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "dataB64"
-})
+@XmlType(name = "", propOrder = { "dataB64" })
 @XmlRootElement(name = "GetTimestamp")
 public class GetTimestamp {
 
-    protected String dataB64;
+	protected String dataB64;
 
-    /**
-     * Gets the value of the dataB64 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDataB64() {
-        return dataB64;
-    }
+	/**
+	 * Gets the value of the dataB64 property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getDataB64() {
+		return dataB64;
+	}
 
-    /**
-     * Sets the value of the dataB64 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDataB64(String value) {
-        this.dataB64 = value;
-    }
+	/**
+	 * Sets the value of the dataB64 property.
+	 * 
+	 * @param value allowed object is {@link String }
+	 * 
+	 */
+	public void setDataB64(String value) {
+		this.dataB64 = value;
+	}
 
 }

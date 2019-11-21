@@ -19,41 +19,41 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Child {
 
-    private String firstName;
-    private String lastName;
+	private String firstName;
+	private String lastName;
 
-    public Child() {
-        this.firstName = "";
-        this.lastName = "";
-    }
+	public Child() {
+		this.firstName = "";
+		this.lastName = "";
+	}
 
-    ;
+	;
 
-    public Child(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+	public Child(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public List<String> getChildTextFieldList() {
-        List<String> childFieldsList = new ArrayList<String>();
-        childFieldsList.add(this.firstName);
-        childFieldsList.add(this.lastName);
-        return childFieldsList;
-    }
+	public List<String> getChildTextFieldList() {
+		List<String> childFieldsList = new ArrayList<String>();
+		childFieldsList.add(this.firstName);
+		childFieldsList.add(this.lastName);
+		return childFieldsList;
+	}
 }

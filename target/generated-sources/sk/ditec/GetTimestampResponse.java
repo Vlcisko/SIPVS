@@ -7,11 +7,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType&gt;
@@ -28,37 +30,31 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "getTimestampResult"
-})
+@XmlType(name = "", propOrder = { "getTimestampResult" })
 @XmlRootElement(name = "GetTimestampResponse")
 public class GetTimestampResponse {
 
-    @XmlElement(name = "GetTimestampResult")
-    protected String getTimestampResult;
+	@XmlElement(name = "GetTimestampResult")
+	protected String getTimestampResult;
 
-    /**
-     * Gets the value of the getTimestampResult property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGetTimestampResult() {
-        return getTimestampResult;
-    }
+	/**
+	 * Gets the value of the getTimestampResult property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getGetTimestampResult() {
+		return getTimestampResult;
+	}
 
-    /**
-     * Sets the value of the getTimestampResult property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGetTimestampResult(String value) {
-        this.getTimestampResult = value;
-    }
+	/**
+	 * Sets the value of the getTimestampResult property.
+	 * 
+	 * @param value allowed object is {@link String }
+	 * 
+	 */
+	public void setGetTimestampResult(String value) {
+		this.getTimestampResult = value;
+	}
 
 }
